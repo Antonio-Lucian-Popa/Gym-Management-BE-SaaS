@@ -4,17 +4,19 @@ package com.asusoftware.Gym_Management_BE.subscription.service;
 
 import com.asusoftware.Gym_Management_BE.subscription.model.Subscription;
 import com.asusoftware.Gym_Management_BE.subscription.model.SubscriptionTier;
+import com.asusoftware.Gym_Management_BE.subscription.model.dto.SubscriptionDto;
 import com.asusoftware.Gym_Management_BE.user.model.User;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface SubscriptionService {
 
     /**
      * Atribuie un abonament gratuit (Basic) unui utilizator.
-     * @param user Utilizatorul care va primi abonamentul.
+     * @param userId Id-ul Utilizatorul care va primi abonamentul.
      */
-    void assignFreeSubscriptionToUser(User user);
+    void assignFreeSubscriptionToUser(UUID userId);
 
     /**
      * Verifică dacă un admin poate adăuga mai mulți membri.
@@ -41,5 +43,9 @@ public interface SubscriptionService {
      * @return Obiectul Subscription.
      */
     Subscription findByTier(SubscriptionTier tier);
+
+    List<SubscriptionDto> getAllSubscriptions();
+
+    SubscriptionDto getSubscriptionByTier(String tier);
 }
 

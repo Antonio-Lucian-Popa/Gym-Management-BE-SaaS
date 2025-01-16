@@ -4,15 +4,18 @@ import com.asusoftware.Gym_Management_BE.gym.model.Gym;
 import com.asusoftware.Gym_Management_BE.gym.repository.GymRepository;
 import com.asusoftware.Gym_Management_BE.subscription.model.Subscription;
 import com.asusoftware.Gym_Management_BE.subscription.model.SubscriptionTier;
+import com.asusoftware.Gym_Management_BE.subscription.model.dto.SubscriptionDto;
 import com.asusoftware.Gym_Management_BE.subscription.repository.SubscriptionRepository;
 import com.asusoftware.Gym_Management_BE.subscription.service.SubscriptionService;
 
 import com.asusoftware.Gym_Management_BE.user.model.User;
+import com.asusoftware.Gym_Management_BE.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -21,6 +24,26 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private SubscriptionRepository subscriptionRepository;
     @Autowired
     private GymRepository gymRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public void assignFreeSubscriptionToUser(UUID userId) {
+        // Găsește utilizatorul după ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        // Obține abonamentul FREE (Basic)
+        Subscription freeSubscription = findByTier(SubscriptionTier.BASIC);
+
+        Gym gym = new Gym();
+        gym.setOwner(user);
+        gym.setSubscriptionTier(freeSubscription.getTier());
+        gym.setSubscriptionStatus("active");
+
+        gymRepository.save(gym);
+    }
+
 
     @Override
     public void assignFreeSubscriptionToUser(User user) {
@@ -76,5 +99,29 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscriptionRepository.findByTier(tier)
                 .orElseThrow(() -> new RuntimeException("Subscription tier not found: " + tier.getTierName()));
     }
+
+    @Override
+    public List<SubscriptionDto> getAllSubscriptions() {
+        return subscriptionRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public SubscriptionDto getSubscriptionByTier(String tier) {
+        Subscription subscription = findByTier(SubscriptionTier.fromString(tier));
+        return mapToDto(subscription);
+    }
+
+    private SubscriptionDto mapToDto(Subscription subscription) {
+        SubscriptionDto dto = new SubscriptionDto();
+        dto.setTier(subscription.getTier());
+        dto.setMaxMembers(subscription.getMaxMembers());
+        dto.setMaxGyms(subscription.getMaxGyms());
+        dto.setPrice(subscription.getPrice());
+        return dto;
+    }
+
 
 }

@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
         // 3. Atribuie automat abonamentul FREE (doar pentru ADMIN)
         if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-            subscriptionService.assignFreeSubscriptionToUser(user);
+            subscriptionService.assignFreeSubscriptionToUser(user.getId());
         }
 
         return mapToResponseDto(user);
