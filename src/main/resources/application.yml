@@ -36,8 +36,8 @@ keycloak:
     password: admin
 
 stripe:
-  api:
-    key: your_stripe_secret_key
+  api-key: your_stripe_secret_key
+  webhook-secret: your_stripe_webhook_secret
 
 management:
   endpoints:

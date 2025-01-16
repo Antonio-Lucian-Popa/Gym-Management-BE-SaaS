@@ -44,8 +44,12 @@ CREATE TABLE member_payments (
   payment_date date NOT NULL, -- Data plății
   payment_type text NOT NULL, -- Tipul plății (e.g., Card, Stripe)
   status text DEFAULT 'completed', -- Starea plății (e.g., pending, completed)
-  created_at timestamptz DEFAULT now()
+  stripe_payment_id text, -- ID-ul unic al plății din Stripe
+  stripe_customer_id text, -- ID-ul clientului din Stripe
+  receipt_url text, -- URL-ul pentru chitanța Stripe
+  created_at timestamptz DEFAULT now() -- Timpul creării plății
 );
+
 
 CREATE TABLE expenses (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

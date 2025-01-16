@@ -41,6 +41,15 @@ public class MemberPayment {
     @Column(nullable = false)
     private String status = "completed";
 
+    @Column(name = "stripe_payment_id")
+    private String stripePaymentId; // ID-ul unic al plății din Stripe
+
+    @Column(name = "stripe_customer_id")
+    private String stripeCustomerId; // ID-ul clientului din Stripe
+
+    @Column(name = "receipt_url")
+    private String receiptUrl; // URL pentru chitanță generat de Stripe
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 }
