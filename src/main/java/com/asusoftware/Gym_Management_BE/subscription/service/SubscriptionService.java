@@ -3,6 +3,7 @@ package com.asusoftware.Gym_Management_BE.subscription.service;
 
 
 import com.asusoftware.Gym_Management_BE.subscription.model.Subscription;
+import com.asusoftware.Gym_Management_BE.subscription.model.SubscriptionTier;
 import com.asusoftware.Gym_Management_BE.user.model.User;
 
 import java.util.UUID;
@@ -32,13 +33,13 @@ public interface SubscriptionService {
      * @param gymId ID-ul sălii.
      * @param subscriptionTier Tipul abonamentului dorit.
      */
-    void upgradeSubscription(UUID gymId, String subscriptionTier);
+    void upgradeSubscription(UUID gymId, SubscriptionTier subscriptionTier);
 
     /**
      * Găsește un abonament pe baza tipului.
      * @param tier Tipul abonamentului.
      * @return Obiectul Subscription.
      */
-    Subscription findByTier(String tier);
+    Subscription findByTier(SubscriptionTier tier);
 }
 

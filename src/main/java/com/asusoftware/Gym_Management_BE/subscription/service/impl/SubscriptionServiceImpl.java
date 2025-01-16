@@ -3,6 +3,7 @@ package com.asusoftware.Gym_Management_BE.subscription.service.impl;
 import com.asusoftware.Gym_Management_BE.gym.model.Gym;
 import com.asusoftware.Gym_Management_BE.gym.repository.GymRepository;
 import com.asusoftware.Gym_Management_BE.subscription.model.Subscription;
+import com.asusoftware.Gym_Management_BE.subscription.model.SubscriptionTier;
 import com.asusoftware.Gym_Management_BE.subscription.repository.SubscriptionRepository;
 import com.asusoftware.Gym_Management_BE.subscription.service.SubscriptionService;
 
@@ -23,7 +24,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public void assignFreeSubscriptionToUser(User user) {
-        Subscription freeSubscription = findByTier("Basic");
+        Subscription freeSubscription = findByTier(SubscriptionTier.BASIC);
 
         Gym gym = new Gym();
         gym.setOwner(user);
@@ -59,7 +60,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public void upgradeSubscription(UUID gymId, String subscriptionTier) {
+    public void upgradeSubscription(UUID gymId, SubscriptionTier subscriptionTier) {
         Gym gym = gymRepository.findById(gymId)
                 .orElseThrow(() -> new RuntimeException("Gym not found"));
 
@@ -71,8 +72,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public Subscription findByTier(String tier) {
+    public Subscription findByTier(SubscriptionTier tier) {
         return subscriptionRepository.findByTier(tier)
-                .orElseThrow(() -> new RuntimeException("Subscription tier not found: " + tier));
+                .orElseThrow(() -> new RuntimeException("Subscription tier not found: " + tier.getTierName()));
     }
+
 }

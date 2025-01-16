@@ -18,8 +18,9 @@ public class Subscription {
     @GeneratedValue
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
-    private String tier; // Basic, Pro, Enterprise
+    private SubscriptionTier tier;
 
     @Column(name = "max_members", nullable = false)
     private int maxMembers;

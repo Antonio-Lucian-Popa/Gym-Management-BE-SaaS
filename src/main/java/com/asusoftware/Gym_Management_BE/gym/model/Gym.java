@@ -1,5 +1,6 @@
 package com.asusoftware.Gym_Management_BE.gym.model;
 
+import com.asusoftware.Gym_Management_BE.subscription.model.SubscriptionTier;
 import com.asusoftware.Gym_Management_BE.user.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -31,8 +32,9 @@ public class Gym {
     @Column(name = "subscription_status", nullable = false)
     private String subscriptionStatus = "inactive";
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "subscription_tier")
-    private String subscriptionTier; // Basic, Pro, Enterprise
+    private SubscriptionTier subscriptionTier; // Basic, Pro, Enterprise
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
