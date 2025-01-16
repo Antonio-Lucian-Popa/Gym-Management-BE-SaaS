@@ -1,0 +1,49 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gym_management
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  security:
+    oauth2:
+          resourceserver:
+            jwt:
+              issuer-uri: http://localhost:8080/auth/realms/gym-management-realm
+
+
+keycloak:
+  realm: gym-management-realm
+  resource: gym-management-backend
+  auth-server-url: http://localhost:8080/auth
+  credentials:
+    secret: your-client-secret
+  admin:
+    username: admin
+    password: admin
+
+stripe:
+  api:
+    key: your_stripe_secret_key
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+cors:
+  allowedOrigins: http://localhost:3000,http://example.com
