@@ -46,18 +46,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 
     @Override
-    public void assignFreeSubscriptionToUser(User user) {
-        Subscription freeSubscription = findByTier(SubscriptionTier.BASIC);
-
-        Gym gym = new Gym();
-        gym.setOwner(user);
-        gym.setSubscriptionTier(freeSubscription.getTier());
-        gym.setSubscriptionStatus("active");
-
-        gymRepository.save(gym);
-    }
-
-    @Override
     public void validateMemberLimit(UUID gymId) {
         Gym gym = gymRepository.findById(gymId)
                 .orElseThrow(() -> new RuntimeException("Gym not found"));
