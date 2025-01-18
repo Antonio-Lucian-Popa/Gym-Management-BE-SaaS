@@ -22,15 +22,15 @@ spring:
     oauth2:
           resourceserver:
             jwt:
-              issuer-uri: http://localhost:8080/auth/realms/gym-management-realm
+              issuer-uri: http://antonio-dev.go.ro:8081/keycloack-app/realms/gym-management-realm
 
 
 keycloak:
   realm: gym-management-realm
   resource: gym-management-backend
-  auth-server-url: http://localhost:8080/auth
+  auth-server-url: http://antonio-dev.go.ro:8081/keycloack-app/realms/gym-management-realm/protocol/openid-connect/auth
   credentials:
-    secret: your-client-secret
+    secret: iQtQl6ylML5DvzvHoe3uRs54dvSKjwGS
   admin:
     username: admin
     password: admin

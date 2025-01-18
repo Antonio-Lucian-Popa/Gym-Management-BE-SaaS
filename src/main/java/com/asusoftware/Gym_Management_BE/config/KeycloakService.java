@@ -30,7 +30,8 @@ public class KeycloakService {
     private String authServerUrl;
 
     public KeycloakService(@Value("${keycloak.admin.username}") String adminUsername,
-                           @Value("${keycloak.admin.password}") String adminPassword) {
+                           @Value("${keycloak.admin.password}") String adminPassword,
+                           @Value("${keycloak.auth-server-url}") String authServerUrl) {
         this.keycloak = KeycloakBuilder.builder()
                 .serverUrl(authServerUrl)
                 .realm("master")
