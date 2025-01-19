@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /api
+    context-path: /api/v1
 
 spring:
   datasource:
@@ -20,7 +20,7 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   security:
     oauth2:
-          resourceserver:
+          resource server:
             jwt:
               issuer-uri: http://antonio-dev.go.ro:8081/keycloack-app/realms/gym-management-realm
 
@@ -28,7 +28,8 @@ spring:
 keycloak:
   realm: gym-management-realm
   resource: gym-management-backend
-  auth-server-url: http://antonio-dev.go.ro:8081/keycloack-app/realms/gym-management-realm/protocol/openid-connect/auth
+ # auth-server-url: http://antonio-dev.go.ro:8081/keycloack-app/realms/gym-management-realm/protocol/openid-connect/auth
+  auth-server-url: http://antonio-dev.go.ro:8081/keycloack-app/
   credentials:
     secret: iQtQl6ylML5DvzvHoe3uRs54dvSKjwGS
   admin:
@@ -46,4 +47,4 @@ management:
         include: health, info, metrics
 
 cors:
-  allowedOrigins: http://localhost:3000,http://example.com
+  allowedOrigins: '*'

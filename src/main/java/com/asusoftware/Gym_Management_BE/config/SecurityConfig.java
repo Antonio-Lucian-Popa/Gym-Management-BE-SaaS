@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource)) // Configurare CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**").permitAll() // Endpointuri publice
+                        .requestMatchers("/api/v1/user/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Endpointuri protejate pentru ADMIN
                         .anyRequest().authenticated() // Restul necesită autentificare
                 )
