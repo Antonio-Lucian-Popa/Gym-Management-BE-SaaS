@@ -14,4 +14,6 @@ public interface GymRepository extends JpaRepository<Gym, UUID> {
 
     @Query("SELECT COUNT(m) FROM GymMember m WHERE m.gym.id = :gymId")
     long countMembersByGymId(UUID gymId);
+
+    long countByOwnerId(UUID ownerId);
 }

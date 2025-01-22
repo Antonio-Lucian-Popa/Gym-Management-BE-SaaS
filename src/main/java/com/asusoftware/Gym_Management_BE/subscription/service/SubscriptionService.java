@@ -14,38 +14,49 @@ public interface SubscriptionService {
 
     /**
      * Atribuie un abonament gratuit (Basic) unui utilizator.
-     * @param userId Id-ul Utilizatorul care va primi abonamentul.
+     *
+     * @param userId ID-ul utilizatorului care va primi abonamentul.
      */
     void assignFreeSubscriptionToUser(UUID userId);
 
     /**
-     * Verifică dacă un admin poate adăuga mai mulți membri.
-     * @param gymId ID-ul sălii.
+     * Verifică dacă un utilizator poate crea mai multe săli pe baza abonamentului.
+     *
+     * @param userId ID-ul utilizatorului care încearcă să creeze o sală.
      */
-    void validateMemberLimit(UUID gymId);
+    void validateGymLimit(UUID userId);
 
     /**
-     * Verifică dacă un admin poate crea mai multe săli.
-     * @param ownerId ID-ul adminului.
-     */
-    void validateGymLimit(UUID ownerId);
-
-    /**
-     * Permite upgrade-ul abonamentului unui gym.
-     * @param gymId ID-ul sălii.
+     * Permite upgrade-ul abonamentului unui utilizator.
+     *
+     * @param userId ID-ul utilizatorului.
      * @param subscriptionTier Tipul abonamentului dorit.
      */
-    void upgradeSubscription(UUID gymId, SubscriptionTier subscriptionTier);
+  //  void upgradeSubscription(UUID userId, SubscriptionTier subscriptionTier);
 
     /**
      * Găsește un abonament pe baza tipului.
+     *
      * @param tier Tipul abonamentului.
      * @return Obiectul Subscription.
      */
     Subscription findByTier(SubscriptionTier tier);
 
+    /**
+     * Obține toate abonamentele disponibile.
+     *
+     * @return O listă de SubscriptionDto cu toate abonamentele.
+     */
     List<SubscriptionDto> getAllSubscriptions();
 
+    /**
+     * Obține un abonament pe baza numelui tipului.
+     *
+     * @param tier Tipul abonamentului ca String.
+     * @return SubscriptionDto asociat tipului.
+     */
     SubscriptionDto getSubscriptionByTier(String tier);
+
+    void upgradeUserSubscription(UUID userId, SubscriptionTier subscriptionTier);
 }
 

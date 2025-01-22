@@ -40,19 +40,19 @@ public class SubscriptionController {
      * Atribuie abonamentul gratuit (Basic) unui utilizator
      */
     @PostMapping("/assign-free/{userId}")
-    public ResponseEntity<String> assignFreeSubscription(@PathVariable UUID userId) {
+    public ResponseEntity<Void> assignFreeSubscription(@PathVariable UUID userId) {
         subscriptionService.assignFreeSubscriptionToUser(userId);
-        return ResponseEntity.ok("Free subscription assigned successfully.");
+        return ResponseEntity.ok().build();
     }
 
     /**
-     * Upgrade la un abonament pentru o sală
+     * Upgrade la un abonament pentru utilizator
      */
-    @PostMapping("/upgrade/{gymId}")
-    public ResponseEntity<String> upgradeSubscription(
-            @PathVariable UUID gymId,
+    @PostMapping("/upgrade/{userId}")
+    public ResponseEntity<Void> upgradeSubscription(
+            @PathVariable UUID userId,
             @RequestParam SubscriptionTier tier) {
-        subscriptionService.upgradeSubscription(gymId, tier);
-        return ResponseEntity.ok("Subscription upgraded successfully.");
+        subscriptionService.upgradeUserSubscription(userId, tier);
+        return ResponseEntity.ok().build();
     }
 }

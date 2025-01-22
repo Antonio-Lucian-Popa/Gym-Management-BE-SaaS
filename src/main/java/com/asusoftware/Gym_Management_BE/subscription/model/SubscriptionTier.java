@@ -1,5 +1,8 @@
 package com.asusoftware.Gym_Management_BE.subscription.model;
 
+import lombok.Getter;
+
+@Getter
 public enum SubscriptionTier {
     BASIC("Basic", 100, 1, 0.0),
     PRO("Pro", 500, 3, 49.99),
@@ -15,22 +18,6 @@ public enum SubscriptionTier {
         this.maxMembers = maxMembers;
         this.maxGyms = maxGyms;
         this.price = price;
-    }
-
-    public String getTierName() {
-        return tierName;
-    }
-
-    public int getMaxMembers() {
-        return maxMembers;
-    }
-
-    public int getMaxGyms() {
-        return maxGyms;
-    }
-
-    public double getPrice() {
-        return price;
     }
 
     public static SubscriptionTier fromString(String tierName) {

@@ -26,16 +26,6 @@ public class Gym {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner; // Legătură cu utilizatorul admin
 
-    @Column(name = "stripe_customer_id", unique = true)
-    private String stripeCustomerId;
-
-    @Column(name = "subscription_status", nullable = false)
-    private String subscriptionStatus = "inactive";
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "subscription_tier")
-    private SubscriptionTier subscriptionTier; // Basic, Pro, Enterprise
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 

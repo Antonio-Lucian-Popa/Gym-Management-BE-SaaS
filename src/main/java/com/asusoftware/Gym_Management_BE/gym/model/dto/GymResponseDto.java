@@ -11,6 +11,4 @@ public class GymResponseDto {
     private UUID id;
     private String name;
     private UUID ownerId;
-    private SubscriptionTier subscriptionTier;
-    private String subscriptionStatus;
 }

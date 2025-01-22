@@ -40,8 +40,6 @@ public class GymServiceImpl implements GymService {
         Gym gym = new Gym();
         gym.setName(createGymDto.getName());
         gym.setOwner(owner);
-        gym.setSubscriptionTier(SubscriptionTier.BASIC); // Default la Basic
-        gym.setSubscriptionStatus("inactive");
 
         gym = gymRepository.save(gym);
         return mapToResponseDto(gym);
@@ -79,8 +77,6 @@ public class GymServiceImpl implements GymService {
         dto.setId(gym.getId());
         dto.setName(gym.getName());
         dto.setOwnerId(gym.getOwner().getId());
-        dto.setSubscriptionTier(gym.getSubscriptionTier());
-        dto.setSubscriptionStatus(gym.getSubscriptionStatus());
         return dto;
     }
 }
