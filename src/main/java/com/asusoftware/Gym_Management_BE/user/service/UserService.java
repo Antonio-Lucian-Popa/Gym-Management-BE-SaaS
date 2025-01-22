@@ -2,6 +2,7 @@ package com.asusoftware.Gym_Management_BE.user.service;
 
 
 import com.asusoftware.Gym_Management_BE.user.model.dto.CreateUserDto;
+import com.asusoftware.Gym_Management_BE.user.model.dto.LoginRequestDto;
 import com.asusoftware.Gym_Management_BE.user.model.dto.UpdateUserDto;
 import com.asusoftware.Gym_Management_BE.user.model.dto.UserResponseDto;
 

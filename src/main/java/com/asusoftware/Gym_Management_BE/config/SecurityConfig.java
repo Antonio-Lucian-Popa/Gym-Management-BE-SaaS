@@ -32,7 +32,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Dezactivează CSRF pentru REST API
                 .cors(cors -> cors.configurationSource(corsConfigurationSource)) // Configurare CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public/**").permitAll() // Endpointuri publice
                         .requestMatchers("/api/v1/user/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Endpointuri protejate pentru ADMIN
                         .anyRequest().authenticated() // Restul necesită autentificare

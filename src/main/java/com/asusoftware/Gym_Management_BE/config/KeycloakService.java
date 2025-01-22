@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+import java.util.Map;
 
 @Service
 public class KeycloakService {
@@ -73,6 +74,31 @@ public class KeycloakService {
         } else {
             throw new RuntimeException("Failed to create user in Keycloak: " + response.getStatus());
         }
+    }
+
+    /**
+     * Autentifică utilizatorul și returnează un token de acces
+     *
+     * @param email    Email-ul utilizatorului
+     * @param password Parola utilizatorului
+     * @return Tokenul de acces JWT
+     */
+    public String loginUser(String email, String password) {
+        return obtainToken(email, password);
+    }
+
+    public String obtainToken(String username, String password) {
+        Keycloak userKeycloak = KeycloakBuilder.builder()
+                .serverUrl(authServerUrl)
+                .realm(realm)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .username(username)
+                .password(password)
+                .grantType(OAuth2Constants.PASSWORD)
+                .build();
+
+        return userKeycloak.tokenManager().getAccessToken().getToken();
     }
 
     /**

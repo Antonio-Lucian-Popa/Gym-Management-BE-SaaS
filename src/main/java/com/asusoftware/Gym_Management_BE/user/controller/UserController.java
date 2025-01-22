@@ -1,9 +1,8 @@
 package com.asusoftware.Gym_Management_BE.user.controller;
 
 
-import com.asusoftware.Gym_Management_BE.user.model.dto.CreateUserDto;
-import com.asusoftware.Gym_Management_BE.user.model.dto.UpdateUserDto;
-import com.asusoftware.Gym_Management_BE.user.model.dto.UserResponseDto;
+import com.asusoftware.Gym_Management_BE.config.KeycloakService;
+import com.asusoftware.Gym_Management_BE.user.model.dto.*;
 import com.asusoftware.Gym_Management_BE.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,11 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final KeycloakService keycloakService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, KeycloakService keycloakService) {
         this.userService = userService;
+        this.keycloakService = keycloakService;
     }
 
     /**
@@ -30,6 +31,15 @@ public class UserController {
         UserResponseDto createdUser = userService.createUser(createUserDto);
         return ResponseEntity.ok(createdUser);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        String accessToken = keycloakService.loginUser(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+        LoginResponseDto loginResponse = new LoginResponseDto();
+        loginResponse.setAccessToken(accessToken);
+        return ResponseEntity.ok(loginResponse);
+    }
+
 
     /**
      * Endpoint pentru obținerea detaliilor unui utilizator după ID

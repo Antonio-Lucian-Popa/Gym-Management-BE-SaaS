@@ -1,11 +1,11 @@
 server:
   port: 8080
-  servlet:
-    context-path: /api/v1
+#  servlet:
+ #   context-path: /api/v1
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/gym_management
+    url: jdbc:postgresql://antonio-dev.go.ro:16433/gymmanagement
     username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
@@ -20,18 +20,18 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   security:
     oauth2:
-          resource server:
+          resourceserver:
             jwt:
-              issuer-uri: http://antonio-dev.go.ro:8081/keycloack-app/realms/gym-management-realm
+              issuer-uri: http://antonio-dev.go.ro:8081/keycloak-app/realms/gym-management-realm
 
 
 keycloak:
   realm: gym-management-realm
   resource: gym-management-backend
  # auth-server-url: http://antonio-dev.go.ro:8081/keycloack-app/realms/gym-management-realm/protocol/openid-connect/auth
-  auth-server-url: http://antonio-dev.go.ro:8081/keycloack-app/
+  auth-server-url: http://antonio-dev.go.ro:8081/keycloak-app/
   credentials:
-    secret: iQtQl6ylML5DvzvHoe3uRs54dvSKjwGS
+    secret: KimbunOU9OVJaAU9HIpZHJ7fUsICh2gV
   admin:
     username: admin
     password: admin

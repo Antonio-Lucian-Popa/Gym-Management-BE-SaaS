@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         user = userRepository.save(user);
 
         // 3. Atribuie automat abonamentul FREE (doar pentru ADMIN)
-        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+        if ("GYM_ADMIN".equalsIgnoreCase(user.getRole())) {
             subscriptionService.assignFreeSubscriptionToUser(user.getId());
         }
 
