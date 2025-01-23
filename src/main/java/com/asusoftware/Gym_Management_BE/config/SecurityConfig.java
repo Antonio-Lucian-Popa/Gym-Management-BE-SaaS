@@ -32,9 +32,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Dezactivează CSRF pentru REST API
                 .cors(cors -> cors.configurationSource(corsConfigurationSource)) // Configurare CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/user/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Endpointuri protejate pentru ADMIN
-                        .anyRequest().authenticated() // Restul necesită autentificare
+                        // Rute specifice fără autentificare
+                        .requestMatchers("/api/v1/user/create", "/api/v1/user/login").permitAll()
+                       // .requestMatchers("/api/v1/public/**").permitAll() // Adaugă alte endpointuri publice aici
+
+                        // Rute protejate
+                      //  .requestMatchers("/api/admin/**").hasRole("ADMIN") // Endpointuri protejate pentru ADMIN
+
+                        // Orice alt endpoint necesită autentificare
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sesiuni stateless
@@ -48,6 +54,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public JwtDecoder jwtDecoder() {
