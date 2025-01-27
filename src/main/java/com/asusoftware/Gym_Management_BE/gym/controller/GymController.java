@@ -2,6 +2,7 @@ package com.asusoftware.Gym_Management_BE.gym.controller;
 
 
 import com.asusoftware.Gym_Management_BE.gym.model.dto.CreateGymDto;
+import com.asusoftware.Gym_Management_BE.gym.model.dto.GymMemberResponseDto;
 import com.asusoftware.Gym_Management_BE.gym.model.dto.GymResponseDto;
 import com.asusoftware.Gym_Management_BE.gym.model.dto.UpdateGymDto;
 import com.asusoftware.Gym_Management_BE.gym.service.GymService;
@@ -46,6 +47,16 @@ public class GymController {
         List<GymResponseDto> gyms = gymService.getGymsByOwner(ownerId);
         return ResponseEntity.ok(gyms);
     }
+
+    /**
+     * Obține membrii unei săli după ID-ul sălii.
+     */
+    @GetMapping("/{gymId}/members")
+    public ResponseEntity<List<GymMemberResponseDto>> getMembersByGymId(@PathVariable UUID gymId) {
+        List<GymMemberResponseDto> members = gymService.getMembersByGymId(gymId);
+        return ResponseEntity.ok(members);
+    }
+
 
     /**
      * Actualizează informațiile despre o sală.

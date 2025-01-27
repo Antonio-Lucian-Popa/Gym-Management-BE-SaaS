@@ -41,13 +41,20 @@ public class UserServiceImpl implements UserService {
         user.setEmail(createUserDto.getEmail());
         user.setPhone(createUserDto.getPhone());
         user.setRole(createUserDto.getRole());
-        user = userRepository.save(user);
+        userRepository.save(user);
 
         // 3. Atribuie automat abonamentul FREE (doar pentru ADMIN)
         if ("GYM_ADMIN".equalsIgnoreCase(user.getRole())) {
             subscriptionService.assignFreeSubscriptionToUser(user.getId()); // Aici e pb
         }
 
+        return mapToResponseDto(user);
+    }
+
+    @Override
+    public UserResponseDto getUserByKeycloakId(UUID keycloakId) {
+        User user = userRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(() -> new RuntimeException("User not found with keycloakId: " + keycloakId));
         return mapToResponseDto(user);
     }
 

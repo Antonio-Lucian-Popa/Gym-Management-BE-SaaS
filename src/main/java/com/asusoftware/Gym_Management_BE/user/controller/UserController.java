@@ -5,12 +5,14 @@ import com.asusoftware.Gym_Management_BE.config.KeycloakService;
 import com.asusoftware.Gym_Management_BE.user.model.dto.*;
 import com.asusoftware.Gym_Management_BE.user.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -38,6 +40,13 @@ public class UserController {
         LoginResponseDto loginResponse = new LoginResponseDto();
         loginResponse.setAccessToken(accessToken);
         return ResponseEntity.ok(loginResponse);
+    }
+
+    // Endpoint pentru obținerea utilizatorului după keycloakId
+    @GetMapping("/by-keycloak-id/{keycloakId}")
+    public ResponseEntity<UserResponseDto> getUserByKeycloakId(@PathVariable UUID keycloakId) {
+        UserResponseDto user = userService.getUserByKeycloakId(keycloakId);
+        return ResponseEntity.ok(user);
     }
 
 

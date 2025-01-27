@@ -47,4 +47,4 @@ management:
         include: health, info, metrics
 
 cors:
-  allowedOrigins: '*'
+  allowedOrigins: 'http://localhost:3000'

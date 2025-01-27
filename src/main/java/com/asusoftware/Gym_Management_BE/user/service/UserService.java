@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public interface UserService {
     UserResponseDto createUser(CreateUserDto createUserDto);
+    UserResponseDto getUserByKeycloakId(UUID keycloakId);
     UserResponseDto getUserById(UUID id);
     List<UserResponseDto> getAllUsers();
     UserResponseDto updateUser(UUID id, UpdateUserDto updateUserDto);

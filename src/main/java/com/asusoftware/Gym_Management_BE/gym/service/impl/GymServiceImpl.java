@@ -1,9 +1,12 @@
 package com.asusoftware.Gym_Management_BE.gym.service.impl;
 
 import com.asusoftware.Gym_Management_BE.gym.model.Gym;
+import com.asusoftware.Gym_Management_BE.gym.model.GymMember;
 import com.asusoftware.Gym_Management_BE.gym.model.dto.CreateGymDto;
+import com.asusoftware.Gym_Management_BE.gym.model.dto.GymMemberResponseDto;
 import com.asusoftware.Gym_Management_BE.gym.model.dto.GymResponseDto;
 import com.asusoftware.Gym_Management_BE.gym.model.dto.UpdateGymDto;
+import com.asusoftware.Gym_Management_BE.gym.repository.GymMemberRepository;
 import com.asusoftware.Gym_Management_BE.gym.repository.GymRepository;
 import com.asusoftware.Gym_Management_BE.gym.service.GymService;
 import com.asusoftware.Gym_Management_BE.subscription.model.SubscriptionTier;
@@ -22,11 +25,13 @@ public class GymServiceImpl implements GymService {
     private final GymRepository gymRepository;
     private final UserRepository userRepository;
     private final SubscriptionService subscriptionService;
+    private final GymMemberRepository gymMemberRepository;
 
-    public GymServiceImpl(GymRepository gymRepository, UserRepository userRepository, SubscriptionService subscriptionService) {
+    public GymServiceImpl(GymRepository gymRepository, UserRepository userRepository, SubscriptionService subscriptionService, GymMemberRepository gymMemberRepository) {
         this.gymRepository = gymRepository;
         this.userRepository = userRepository;
         this.subscriptionService = subscriptionService;
+        this.gymMemberRepository = gymMemberRepository;
     }
 
     @Override
@@ -59,6 +64,21 @@ public class GymServiceImpl implements GymService {
     }
 
     @Override
+    public List<GymMemberResponseDto> getMembersByGymId(UUID gymId) {
+        // Verifică dacă sala există
+        Gym gym = gymRepository.findById(gymId)
+                .orElseThrow(() -> new RuntimeException("Gym not found with ID: " + gymId));
+
+        // Obține membrii sălii
+        List<GymMember> members = gymMemberRepository.findByGymId(gymId);
+
+        // Mapează membrii la DTO-uri pentru răspuns
+        return members.stream()
+                .map(this::mapToGymMemberResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public GymResponseDto updateGym(UUID gymId, UpdateGymDto updateGymDto) {
         Gym gym = gymRepository.findById(gymId)
                 .orElseThrow(() -> new RuntimeException("Gym not found"));
@@ -77,6 +97,19 @@ public class GymServiceImpl implements GymService {
         dto.setId(gym.getId());
         dto.setName(gym.getName());
         dto.setOwnerId(gym.getOwner().getId());
+        return dto;
+    }
+
+    private GymMemberResponseDto mapToGymMemberResponseDto(GymMember member) {
+        GymMemberResponseDto dto = new GymMemberResponseDto();
+        dto.setId(member.getId());
+        dto.setUserId(member.getUser().getId());
+        dto.setFirstName(member.getUser().getFirstName());
+        dto.setLastName(member.getUser().getLastName());
+        dto.setMembershipType(member.getMembershipType());
+        dto.setMembershipStatus(member.getMembershipStatus());
+        dto.setStartDate(member.getStartDate());
+        dto.setEndDate(member.getEndDate());
         return dto;
     }
 }

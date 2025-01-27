@@ -1,6 +1,7 @@
 package com.asusoftware.Gym_Management_BE.config;
 
 import com.asusoftware.Gym_Management_BE.user.model.dto.CreateUserDto;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class KeycloakService {
 

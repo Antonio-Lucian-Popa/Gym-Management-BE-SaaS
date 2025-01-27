@@ -38,7 +38,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
-        Subscription freeSubscription = findByTier(SubscriptionTier.BASIC);
+        Subscription freeSubscription = subscriptionRepository.findByTier(SubscriptionTier.BASIC)
+                .orElseThrow(() -> new RuntimeException("Subscription tier not found"));
 
         UserSubscription userSubscription = new UserSubscription();
         userSubscription.setUser(user);
