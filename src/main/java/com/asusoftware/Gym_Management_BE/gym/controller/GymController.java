@@ -1,10 +1,7 @@
 package com.asusoftware.Gym_Management_BE.gym.controller;
 
 
-import com.asusoftware.Gym_Management_BE.gym.model.dto.CreateGymDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.GymMemberResponseDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.GymResponseDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.UpdateGymDto;
+import com.asusoftware.Gym_Management_BE.gym.model.dto.*;
 import com.asusoftware.Gym_Management_BE.gym.service.GymService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +52,38 @@ public class GymController {
     public ResponseEntity<List<GymMemberResponseDto>> getMembersByGymId(@PathVariable UUID gymId) {
         List<GymMemberResponseDto> members = gymService.getMembersByGymId(gymId);
         return ResponseEntity.ok(members);
+    }
+
+    /**
+     * Adaugă un membru într-o sală.
+     */
+    @PostMapping("/{gymId}/members")
+    public ResponseEntity<GymMemberResponseDto> addMemberToGym(
+            @PathVariable UUID gymId,
+            @Valid @RequestBody CreateGymMemberDto createGymMemberDto) {
+        GymMemberResponseDto newMember = gymService.addMemberToGym(gymId, createGymMemberDto);
+        return ResponseEntity.ok(newMember);
+    }
+
+    /**
+     * Actualizează informațiile unui membru dintr-o sală.
+     */
+    @PutMapping("/{gymId}/members/{memberId}")
+    public ResponseEntity<GymMemberResponseDto> updateGymMember(
+            @PathVariable UUID gymId,
+            @PathVariable UUID memberId,
+            @Valid @RequestBody UpdateGymMemberDto updateGymMemberDto) {
+        GymMemberResponseDto updatedMember = gymService.updateGymMember(gymId, memberId, updateGymMemberDto);
+        return ResponseEntity.ok(updatedMember);
+    }
+
+    /**
+     * Șterge un membru dintr-o sală.
+     */
+    @DeleteMapping("/{gymId}/members/{memberId}")
+    public ResponseEntity<String> deleteGymMember(@PathVariable UUID gymId, @PathVariable UUID memberId) {
+        gymService.deleteGymMember(gymId, memberId);
+        return ResponseEntity.ok("Gym member deleted successfully.");
     }
 
 

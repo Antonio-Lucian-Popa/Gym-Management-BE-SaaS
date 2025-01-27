@@ -1,9 +1,6 @@
 package com.asusoftware.Gym_Management_BE.gym.service;
 
-import com.asusoftware.Gym_Management_BE.gym.model.dto.CreateGymDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.GymMemberResponseDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.GymResponseDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.UpdateGymDto;
+import com.asusoftware.Gym_Management_BE.gym.model.dto.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,9 +12,18 @@ public interface GymService {
     GymResponseDto getGymById(UUID gymId);
 
     List<GymResponseDto> getGymsByOwner(UUID ownerId);
-    List<GymMemberResponseDto> getMembersByGymId(UUID gymId);
 
     GymResponseDto updateGym(UUID gymId, UpdateGymDto updateGymDto);
 
     void deleteGym(UUID gymId);
+
+
+    List<GymMemberResponseDto> getMembersByGymId(UUID gymId);
+
+    GymMemberResponseDto addMemberToGym(UUID gymId, CreateGymMemberDto createGymMemberDto);
+
+    GymMemberResponseDto updateGymMember(UUID gymId, UUID memberId, UpdateGymMemberDto updateGymMemberDto);
+
+    void deleteGymMember(UUID gymId, UUID memberId);
+
 }

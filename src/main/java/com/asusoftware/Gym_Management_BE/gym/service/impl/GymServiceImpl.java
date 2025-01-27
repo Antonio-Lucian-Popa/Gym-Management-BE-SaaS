@@ -2,10 +2,7 @@ package com.asusoftware.Gym_Management_BE.gym.service.impl;
 
 import com.asusoftware.Gym_Management_BE.gym.model.Gym;
 import com.asusoftware.Gym_Management_BE.gym.model.GymMember;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.CreateGymDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.GymMemberResponseDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.GymResponseDto;
-import com.asusoftware.Gym_Management_BE.gym.model.dto.UpdateGymDto;
+import com.asusoftware.Gym_Management_BE.gym.model.dto.*;
 import com.asusoftware.Gym_Management_BE.gym.repository.GymMemberRepository;
 import com.asusoftware.Gym_Management_BE.gym.repository.GymRepository;
 import com.asusoftware.Gym_Management_BE.gym.service.GymService;
@@ -15,6 +12,7 @@ import com.asusoftware.Gym_Management_BE.user.model.User;
 import com.asusoftware.Gym_Management_BE.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -99,6 +97,55 @@ public class GymServiceImpl implements GymService {
         dto.setOwnerId(gym.getOwner().getId());
         return dto;
     }
+
+    @Override
+    public GymMemberResponseDto addMemberToGym(UUID gymId, CreateGymMemberDto createGymMemberDto) {
+        // Găsește sala
+        Gym gym = gymRepository.findById(gymId)
+                .orElseThrow(() -> new RuntimeException("Gym not found with ID: " + gymId));
+
+        // Găsește utilizatorul după email
+        User user = userRepository.findByEmail(createGymMemberDto.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + createGymMemberDto.getEmail()));
+
+        // Creează membrul sălii
+        GymMember gymMember = new GymMember();
+        gymMember.setUser(user);
+        gymMember.setGym(gym);
+        gymMember.setMembershipType(createGymMemberDto.getMembershipType());
+        gymMember.setStartDate(createGymMemberDto.getStartDate() != null ? createGymMemberDto.getStartDate() : LocalDate.now());
+        gymMember.setEndDate(createGymMemberDto.getEndDate());
+
+        gymMember = gymMemberRepository.save(gymMember);
+        return mapToGymMemberResponseDto(gymMember);
+    }
+
+
+    @Override
+    public GymMemberResponseDto updateGymMember(UUID gymId, UUID memberId, UpdateGymMemberDto updateGymMemberDto) {
+        // Găsește membrul sălii
+        GymMember gymMember = gymMemberRepository.findByIdAndGymId(memberId, gymId)
+                .orElseThrow(() -> new RuntimeException("Gym member not found"));
+
+        // Actualizează informațiile membrului
+        gymMember.setMembershipType(updateGymMemberDto.getMembershipType());
+        gymMember.setStartDate(updateGymMemberDto.getStartDate());
+        gymMember.setEndDate(updateGymMemberDto.getEndDate());
+        gymMember.setMembershipStatus(updateGymMemberDto.getMembershipStatus());
+
+        gymMember = gymMemberRepository.save(gymMember);
+        return mapToGymMemberResponseDto(gymMember);
+    }
+
+    @Override
+    public void deleteGymMember(UUID gymId, UUID memberId) {
+        GymMember gymMember = gymMemberRepository.findByIdAndGymId(memberId, gymId)
+                .orElseThrow(() -> new RuntimeException("Gym member not found"));
+
+        gymMemberRepository.delete(gymMember);
+    }
+
+
 
     private GymMemberResponseDto mapToGymMemberResponseDto(GymMember member) {
         GymMemberResponseDto dto = new GymMemberResponseDto();
