@@ -8,6 +8,7 @@ public interface GymMemberProjection {
     String getFirstName();
     String getLastName();
     String getEmail();
+    String getPhoneNumber(); // Adăugat
     String getMembershipType();
     String getMembershipStatus();
     LocalDate getStartDate();

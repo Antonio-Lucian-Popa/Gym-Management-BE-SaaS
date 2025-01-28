@@ -72,10 +72,9 @@ public class GymController {
             @RequestParam(defaultValue = "firstName,asc") String sort,
             @RequestParam(defaultValue = "") String filter) {
 
-        // Construiește sortarea pe baza query-ului din front-end
+        // Construim sortarea din parametrii URL
         String[] sortParams = sort.split(",");
         Sort sortBy = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
-
         Pageable pageable = PageRequest.of(page, size, sortBy);
 
         Page<GymMemberProjection> members = gymService.getMembersByGymId(gymId, filter, pageable);
