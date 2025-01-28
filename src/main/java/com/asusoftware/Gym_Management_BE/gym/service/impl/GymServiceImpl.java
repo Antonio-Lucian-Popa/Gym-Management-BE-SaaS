@@ -10,6 +10,11 @@ import com.asusoftware.Gym_Management_BE.subscription.model.SubscriptionTier;
 import com.asusoftware.Gym_Management_BE.subscription.service.SubscriptionService;
 import com.asusoftware.Gym_Management_BE.user.model.User;
 import com.asusoftware.Gym_Management_BE.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -118,6 +123,43 @@ public class GymServiceImpl implements GymService {
 
         gymMember = gymMemberRepository.save(gymMember);
         return mapToGymMemberResponseDto(gymMember);
+    }
+
+    @Override
+    public Page<GymMemberResponseDto> getMembersByGymIdWithFilterAndSort(UUID gymId, int page, int size, String sort, String filter) {
+        // 1. Verifică dacă sala există
+        gymRepository.findById(gymId)
+                .orElseThrow(() -> new RuntimeException("Gym not found with ID: " + gymId));
+
+        // 2. Construiește criteriile de sortare
+        Sort sorting = Sort.unsorted();
+        if (!sort.isEmpty()) {
+            String[] sortParams = sort.split(",");
+            sorting = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
+        }
+
+        // 3. Aplicați paginația
+        Pageable pageable = PageRequest.of(page, size, sorting);
+
+        // 4. Aplică filtrarea
+        Specification<GymMember> specification = (root, query, criteriaBuilder) -> {
+            if (!filter.isEmpty()) {
+                String[] filterParams = filter.split(":");
+                return criteriaBuilder.like(root.get(filterParams[0]), "%" + filterParams[1] + "%");
+            }
+            return null;
+        };
+
+        // 5. Obține membrii filtrați, sortați și paginați
+        Page<GymMember> membersPage = gymMemberRepository.findAll(Specification.where(specification), pageable);
+
+        // 6. Mapează rezultatele în DTO-uri
+        return membersPage.map(this::mapToGymMemberResponseDto);
+    }
+
+    @Override
+    public Page<GymMemberProjection> getMembersByGymId(UUID gymId, String filter, Pageable pageable) {
+        return gymMemberRepository.findMembersByGymIdAndFilter(gymId, filter, pageable);
     }
 
 

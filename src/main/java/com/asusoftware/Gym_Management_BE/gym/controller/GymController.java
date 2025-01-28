@@ -4,6 +4,10 @@ package com.asusoftware.Gym_Management_BE.gym.controller;
 import com.asusoftware.Gym_Management_BE.gym.model.dto.*;
 import com.asusoftware.Gym_Management_BE.gym.service.GymService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,11 +52,36 @@ public class GymController {
     /**
      * Obține membrii unei săli după ID-ul sălii.
      */
+//    @GetMapping("/{gymId}/members")
+//    public ResponseEntity<Page<GymMemberResponseDto>> getMembersByGymId(
+//            @PathVariable UUID gymId,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            @RequestParam(defaultValue = "") String sort, // Exemplu: "firstName,asc"
+//            @RequestParam(defaultValue = "") String filter // Exemplu: "firstName:John"
+//    ) {
+//        Page<GymMemberResponseDto> members = gymService.getMembersByGymIdWithFilterAndSort(gymId, page, size, sort, filter);
+//        return ResponseEntity.ok(members);
+//    }
+
     @GetMapping("/{gymId}/members")
-    public ResponseEntity<List<GymMemberResponseDto>> getMembersByGymId(@PathVariable UUID gymId) {
-        List<GymMemberResponseDto> members = gymService.getMembersByGymId(gymId);
+    public ResponseEntity<Page<GymMemberProjection>> getMembersByGymId(
+            @PathVariable UUID gymId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "firstName,asc") String sort,
+            @RequestParam(defaultValue = "") String filter) {
+
+        // Construiește sortarea pe baza query-ului din front-end
+        String[] sortParams = sort.split(",");
+        Sort sortBy = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
+
+        Pageable pageable = PageRequest.of(page, size, sortBy);
+
+        Page<GymMemberProjection> members = gymService.getMembersByGymId(gymId, filter, pageable);
         return ResponseEntity.ok(members);
     }
+
 
     /**
      * Adaugă un membru într-o sală.
