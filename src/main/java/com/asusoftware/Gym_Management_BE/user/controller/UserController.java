@@ -5,10 +5,15 @@ import com.asusoftware.Gym_Management_BE.config.KeycloakService;
 import com.asusoftware.Gym_Management_BE.user.model.dto.*;
 import com.asusoftware.Gym_Management_BE.user.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,6 +51,12 @@ public class UserController {
     @GetMapping("/by-keycloak-id/{keycloakId}")
     public ResponseEntity<UserResponseDto> getUserByKeycloakId(@PathVariable UUID keycloakId) {
         UserResponseDto user = userService.getUserByKeycloakId(keycloakId);
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/by-email/{email}")
+    public ResponseEntity<UserResponseDto> getUserByEmail(@PathVariable @Email String email) {
+        UserResponseDto user = userService.getUserByEmail(URLDecoder.decode(email, StandardCharsets.UTF_8));
         return ResponseEntity.ok(user);
     }
 

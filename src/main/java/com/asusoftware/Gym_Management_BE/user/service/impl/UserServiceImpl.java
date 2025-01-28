@@ -9,7 +9,9 @@ import com.asusoftware.Gym_Management_BE.user.model.dto.UpdateUserDto;
 import com.asusoftware.Gym_Management_BE.user.model.dto.UserResponseDto;
 import com.asusoftware.Gym_Management_BE.user.repository.UserRepository;
 import com.asusoftware.Gym_Management_BE.user.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +57,13 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto getUserByKeycloakId(UUID keycloakId) {
         User user = userRepository.findByKeycloakId(keycloakId)
                 .orElseThrow(() -> new RuntimeException("User not found with keycloakId: " + keycloakId));
+        return mapToResponseDto(user);
+    }
+
+    public UserResponseDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with email: " + email));
+
         return mapToResponseDto(user);
     }
 

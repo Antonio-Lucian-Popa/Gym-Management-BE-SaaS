@@ -13,6 +13,7 @@ public interface UserService {
     UserResponseDto createUser(CreateUserDto createUserDto);
     UserResponseDto getUserByKeycloakId(UUID keycloakId);
     UserResponseDto getUserById(UUID id);
+    UserResponseDto getUserByEmail(String email);
     List<UserResponseDto> getAllUsers();
     UserResponseDto updateUser(UUID id, UpdateUserDto updateUserDto);
     void deleteUser(UUID id);

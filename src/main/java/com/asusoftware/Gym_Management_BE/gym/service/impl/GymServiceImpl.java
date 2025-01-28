@@ -159,7 +159,11 @@ public class GymServiceImpl implements GymService {
 
     @Override
     public Page<GymMemberProjection> getMembersByGymId(UUID gymId, String filter, Pageable pageable) {
-        return gymMemberRepository.findMembersByGymIdAndFilter(gymId, filter, pageable);
+        String firstNameFilter = extractFilterValue(filter, "firstName");
+        String lastNameFilter = extractFilterValue(filter, "lastName");
+        String emailFilter = extractFilterValue(filter, "email");
+
+        return gymMemberRepository.findMembersByGymIdAndFilter(gymId, firstNameFilter, lastNameFilter, emailFilter, pageable);
     }
 
 
@@ -187,7 +191,15 @@ public class GymServiceImpl implements GymService {
         gymMemberRepository.delete(gymMember);
     }
 
-
+    private String extractFilterValue(String filter, String field) {
+        String[] filters = filter.split(",");
+        for (String f : filters) {
+            if (f.startsWith(field + ":")) {
+                return f.split(":")[1]; // Extrage valoarea după ":"
+            }
+        }
+        return "";
+    }
 
     private GymMemberResponseDto mapToGymMemberResponseDto(GymMember member) {
         GymMemberResponseDto dto = new GymMemberResponseDto();
