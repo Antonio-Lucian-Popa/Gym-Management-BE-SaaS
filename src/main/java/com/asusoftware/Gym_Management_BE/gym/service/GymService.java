@@ -22,7 +22,7 @@ public interface GymService {
 
     List<GymMemberResponseDto> getMembersByGymId(UUID gymId);
 
-    Page<GymMemberProjection> getMembersByGymId(UUID gymId, String filter, Pageable pageable);
+    PagedResponse<GymMemberProjection> getMembersByGymId(UUID gymId, Pageable pageable);
 
     Page<GymMemberResponseDto> getMembersByGymIdWithFilterAndSort(UUID gymId, int page, int size, String sort, String filter);
 

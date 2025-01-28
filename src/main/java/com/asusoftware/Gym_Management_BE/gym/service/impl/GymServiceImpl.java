@@ -158,13 +158,12 @@ public class GymServiceImpl implements GymService {
     }
 
     @Override
-    public Page<GymMemberProjection> getMembersByGymId(UUID gymId, String filter, Pageable pageable) {
-        String firstNameFilter = extractFilterValue(filter, "firstName");
-        String lastNameFilter = extractFilterValue(filter, "lastName");
-        String emailFilter = extractFilterValue(filter, "email");
-
-        return gymMemberRepository.findMembersByGymIdAndFilter(gymId, firstNameFilter, lastNameFilter, emailFilter, pageable);
+    public PagedResponse<GymMemberProjection> getMembersByGymId(UUID gymId, Pageable pageable) {
+        Page<GymMemberProjection> page = gymMemberRepository.findMembersByGymId(gymId, pageable);
+        return new PagedResponse<>(page);
     }
+
+
 
 
     @Override
@@ -191,15 +190,21 @@ public class GymServiceImpl implements GymService {
         gymMemberRepository.delete(gymMember);
     }
 
-    private String extractFilterValue(String filter, String field) {
+    private String extractFilterValue(String filter, String key) {
+        if (filter == null || filter.trim().isEmpty()) {
+            return "";
+        }
+
         String[] filters = filter.split(",");
         for (String f : filters) {
-            if (f.startsWith(field + ":")) {
-                return f.split(":")[1]; // Extrage valoarea după ":"
+            String[] keyValue = f.split(":");
+            if (keyValue.length == 2 && keyValue[0].equalsIgnoreCase(key)) {
+                return keyValue[1];
             }
         }
         return "";
     }
+
 
     private GymMemberResponseDto mapToGymMemberResponseDto(GymMember member) {
         GymMemberResponseDto dto = new GymMemberResponseDto();

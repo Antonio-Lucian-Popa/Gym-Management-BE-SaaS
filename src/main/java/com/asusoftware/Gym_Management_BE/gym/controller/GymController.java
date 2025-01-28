@@ -12,8 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/gyms")
@@ -64,21 +67,19 @@ public class GymController {
 //        return ResponseEntity.ok(members);
 //    }
 
+    /**
+     * Obține membrii unei săli după ID-ul sălii, cu paginare și filtrare.
+     */
     @GetMapping("/{gymId}/members")
-    public ResponseEntity<Page<GymMemberProjection>> getMembersByGymId(
+    public ResponseEntity<PagedResponse<GymMemberProjection>> getMembersByGymId(
             @PathVariable UUID gymId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "firstName,asc") String sort,
-            @RequestParam(defaultValue = "") String filter) {
-
-        // Construim sortarea din parametrii URL
-        String[] sortParams = sort.split(",");
-        Sort sortBy = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
-        Pageable pageable = PageRequest.of(page, size, sortBy);
-
-        Page<GymMemberProjection> members = gymService.getMembersByGymId(gymId, filter, pageable);
-        return ResponseEntity.ok(members);
+            @RequestParam(defaultValue = "user.firstName,asc") String[] sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(parseSortParams(sort)));
+        PagedResponse<GymMemberProjection> response = gymService.getMembersByGymId(gymId, pageable);
+        return ResponseEntity.ok(response);
     }
 
 
@@ -131,5 +132,17 @@ public class GymController {
     public ResponseEntity<String> deleteGym(@PathVariable UUID gymId) {
         gymService.deleteGym(gymId);
         return ResponseEntity.ok("Gym deleted successfully.");
+    }
+
+    /**
+     * Converteste parametrii de sortare într-un obiect Sort.
+     */
+    private List<Sort.Order> parseSortParams(String[] sortParams) {
+        return Arrays.stream(sortParams)
+                .map(param -> {
+                    String[] parts = param.split(",");
+                    return new Sort.Order(Sort.Direction.fromString(parts[1]), parts[0]);
+                })
+                .toList();
     }
 }
