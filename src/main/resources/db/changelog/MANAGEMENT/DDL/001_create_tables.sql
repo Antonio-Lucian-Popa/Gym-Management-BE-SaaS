@@ -20,7 +20,7 @@ CREATE TABLE gyms (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name text NOT NULL,
   owner_id UUID REFERENCES users(id) NOT NULL, -- Adminul sălii
-  subscription_status text DEFAULT 'inactive', -- Starea abonamentului (e.g., active, inactive)
+  subscription_status text DEFAULT 'INACTIVE', -- Starea abonamentului (e.g., active, inactive)
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
@@ -31,7 +31,7 @@ CREATE TABLE gym_members (
   user_id UUID REFERENCES users(id) NOT NULL, -- Utilizatorul din tabela `users`
   gym_id UUID REFERENCES gyms(id) NOT NULL, -- Sala la care este membru
   membership_type text NOT NULL, -- Tipul abonamentului membrului
-  membership_status text DEFAULT 'active' CHECK (membership_status IN ('active', 'inactive', 'canceled')), -- Starea abonamentului
+  membership_status text DEFAULT 'ACTIVE' CHECK (membership_status IN ('ACTIVE', 'INACTIVE', 'CANCELED')), -- Starea abonamentului
   start_date date NOT NULL, -- Data începerii abonamentului
   end_date date, -- Data expirării abonamentului
   created_at timestamptz DEFAULT now(),
@@ -90,7 +90,7 @@ CREATE TABLE user_subscriptions (
   subscription_id UUID REFERENCES subscriptions(id) NOT NULL, -- Abonamentul asociat
   start_date DATE NOT NULL, -- Data începerii abonamentului
   end_date DATE, -- Data expirării abonamentului
-  status TEXT DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'canceled')), -- Starea abonamentului
+  status TEXT DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'INACTIVE', 'CANCELED')), -- Starea abonamentului
   created_at TIMESTAMP DEFAULT now(), -- Data creării înregistrării
   updated_at TIMESTAMP DEFAULT now() -- Data ultimei actualizări
 );

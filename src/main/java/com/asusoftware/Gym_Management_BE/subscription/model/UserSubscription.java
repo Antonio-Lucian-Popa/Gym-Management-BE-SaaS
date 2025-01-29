@@ -34,7 +34,7 @@ public class UserSubscription {
     private LocalDate endDate; // DATE în baza de date
 
     @Column(name = "status", nullable = false)
-    private String status = "active"; // Status: active, inactive, canceled
+    private String status = "ACTIVE"; // Status: active, inactive, canceled
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

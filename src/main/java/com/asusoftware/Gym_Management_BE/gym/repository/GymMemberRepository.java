@@ -19,23 +19,49 @@ public interface GymMemberRepository extends JpaRepository<GymMember, UUID>, Jpa
     List<GymMember> findByGymId(UUID gymId);
 
     @Query("""
-     SELECT g.id as id,
-            u.firstName as firstName,
-            u.lastName as lastName,
-            u.email as email,
-            u.phone as phoneNumber, 
-            g.membershipType as membershipType,
-            g.membershipStatus as membershipStatus,
-            g.startDate as startDate,
-            g.endDate as endDate
-     FROM GymMember g
-     JOIN g.user u
-     WHERE g.gym.id = :gymId
-""")
+        SELECT g.id as id,
+               u.firstName as firstName,
+               u.lastName as lastName,
+               u.email as email,
+               u.phone as phoneNumber, 
+               g.membershipType as membershipType,
+               g.membershipStatus as membershipStatus,
+               g.startDate as startDate,
+               g.endDate as endDate
+        FROM GymMember g
+        JOIN g.user u
+        WHERE g.gym.id = :gymId
+    """)
     Page<GymMemberProjection> findMembersByGymId(@Param("gymId") UUID gymId, Pageable pageable);
 
 
 
+    @Query("""
+        SELECT g.id as id,
+               u.firstName as firstName,
+               u.lastName as lastName,
+               u.email as email,
+               u.phone as phoneNumber, 
+               g.membershipType as membershipType,
+               g.membershipStatus as membershipStatus,
+               g.startDate as startDate,
+               g.endDate as endDate
+        FROM GymMember g
+        JOIN g.user u
+        WHERE g.gym.id = :gymId
+          AND (
+               LOWER(u.firstName) LIKE LOWER(CONCAT('%', :firstNameFilter, '%')) 
+            OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :lastNameFilter, '%'))
+            OR LOWER(u.email) LIKE LOWER(CONCAT('%', :emailFilter, '%'))
+          )
+    """)
+    Page<GymMemberProjection> findMembersByGymIdAndFilter(
+            @Param("gymId") UUID gymId,
+            @Param("firstNameFilter") String firstNameFilter,
+            @Param("lastNameFilter") String lastNameFilter,
+            @Param("emailFilter") String emailFilter,
+            Pageable pageable
+    );
 
 
     Optional<GymMember> findByIdAndGymId(UUID memberId, UUID gymId);

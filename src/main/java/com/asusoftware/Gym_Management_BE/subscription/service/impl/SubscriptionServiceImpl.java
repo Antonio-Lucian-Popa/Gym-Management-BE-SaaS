@@ -46,7 +46,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         userSubscription.setSubscription(freeSubscription);
         userSubscription.setStartDate(LocalDate.now());
         // userSubscription.setEndDate(LocalDate.now().plusMonths(1)); // E valabil decat o luna, asta pentru abonamentele alea platite nu free
-        userSubscription.setStatus("active");
+        userSubscription.setStatus("ACTIVE");
 
         userSubscriptionRepository.save(userSubscription);
     }

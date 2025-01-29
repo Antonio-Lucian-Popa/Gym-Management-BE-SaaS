@@ -19,6 +19,6 @@ public interface UserSubscriptionRepository extends JpaRepository<UserSubscripti
      * @param userId ID-ul utilizatorului.
      * @return Obiectul UserSubscription, dacă există unul activ.
      */
-    @Query("SELECT us FROM UserSubscription us WHERE us.user.id = :userId AND us.status = 'active'")
+    @Query("SELECT us FROM UserSubscription us WHERE us.user.id = :userId AND us.status = 'ACTIVE'")
     Optional<UserSubscription> findActiveSubscriptionByUserId(UUID userId);
 }

@@ -1,7 +1,6 @@
 package com.asusoftware.Gym_Management_BE.gym.service;
 
 import com.asusoftware.Gym_Management_BE.gym.model.dto.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -19,17 +18,11 @@ public interface GymService {
 
     void deleteGym(UUID gymId);
 
-
-    List<GymMemberResponseDto> getMembersByGymId(UUID gymId);
-
-    PagedResponse<GymMemberProjection> getMembersByGymId(UUID gymId, Pageable pageable);
-
-    Page<GymMemberResponseDto> getMembersByGymIdWithFilterAndSort(UUID gymId, int page, int size, String sort, String filter);
+    PagedResponse<GymMemberProjection> getMembersByGymId(UUID gymId, String filter, Pageable pageable);
 
     GymMemberResponseDto addMemberToGym(UUID gymId, CreateGymMemberDto createGymMemberDto);
 
     GymMemberResponseDto updateGymMember(UUID gymId, UUID memberId, UpdateGymMemberDto updateGymMemberDto);
 
     void deleteGymMember(UUID gymId, UUID memberId);
-
 }

@@ -31,7 +31,7 @@ public class GymMember {
     private String membershipType;
 
     @Column(name = "membership_status", nullable = false)
-    private String membershipStatus = "active";
+    private String membershipStatus = "ACTIVE";
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
