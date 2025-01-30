@@ -106,6 +106,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setMember(member); // Asociază membrul corect
         payment.setAmount(dto.getAmount());
         payment.setPaymentDate(LocalDate.now());
+        payment.setDescription(dto.getDescription());
         payment.setPaymentType(dto.getPaymentType());
         payment.setStatus("pending");
         payment.setStripePaymentId(paymentIntent.getId()); // ID Stripe
@@ -124,6 +125,7 @@ public class PaymentServiceImpl implements PaymentService {
         dto.setPaymentType(payment.getPaymentType());
         dto.setStatus(payment.getStatus());
         dto.setPaymentDate(payment.getPaymentDate().toString());
+        dto.setDescription(payment.getDescription());
         dto.setReceiptUrl(payment.getReceiptUrl());
         return dto;
     }

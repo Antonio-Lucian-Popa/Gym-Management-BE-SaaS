@@ -32,6 +32,9 @@ public class MemberPayment {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "payment_date", nullable = false)
     private LocalDate paymentDate;
 

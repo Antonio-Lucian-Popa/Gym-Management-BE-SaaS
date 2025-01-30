@@ -44,6 +44,7 @@ CREATE TABLE member_payments (
   gym_id UUID REFERENCES gyms(id) NOT NULL, -- Sala asociată plății
   member_id UUID REFERENCES gym_members(id) NOT NULL, -- Membrul care a făcut plata
   amount numeric NOT NULL, -- Suma plătită
+  description text, -- Detalii despre plată
   payment_date date NOT NULL, -- Data plății
   payment_type text NOT NULL, -- Tipul plății (e.g., Card, Stripe)
   status text DEFAULT 'completed', -- Starea plății (e.g., pending, completed)
@@ -99,3 +100,7 @@ CREATE TABLE user_subscriptions (
 CREATE INDEX idx_user_email ON users(email);
 CREATE INDEX idx_user_subscription_user_id ON user_subscriptions(user_id);
 CREATE INDEX idx_user_subscription_status ON user_subscriptions(status);
+
+CREATE INDEX idx_member_payments_gym_id ON member_payments(gym_id);
+CREATE INDEX idx_member_payments_member_id ON member_payments(member_id);
+CREATE INDEX idx_member_payments_payment_date ON member_payments(payment_date);

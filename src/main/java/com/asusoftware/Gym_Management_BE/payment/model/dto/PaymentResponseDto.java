@@ -12,6 +12,7 @@ public class PaymentResponseDto {
     private UUID memberId;
     private UUID gymId;
     private BigDecimal amount;
+    private String description;
     private String paymentType;
     private String status;
     private String paymentDate;

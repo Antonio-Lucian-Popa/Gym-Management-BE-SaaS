@@ -18,6 +18,8 @@ public class PaymentRequestDto {
     @NotNull
     private BigDecimal amount;
 
+    private String description;
+
     @NotNull
     private String paymentType; // e.g., "Card"
 
