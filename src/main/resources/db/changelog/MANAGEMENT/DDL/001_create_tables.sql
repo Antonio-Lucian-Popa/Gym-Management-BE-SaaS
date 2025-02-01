@@ -21,6 +21,7 @@ CREATE TABLE gyms (
   name text NOT NULL,
   owner_id UUID REFERENCES users(id) NOT NULL, -- Adminul sălii
   subscription_status text DEFAULT 'inactive', -- Starea abonamentului (e.g., active, inactive)
+  biometric_enabled BOOLEAN DEFAULT FALSE, -- Dacă biometria este activată
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
@@ -34,6 +35,7 @@ CREATE TABLE gym_members (
   membership_status text DEFAULT 'active' CHECK (membership_status IN ('active', 'inactive', 'canceled')), -- Starea abonamentului
   start_date date NOT NULL, -- Data începerii abonamentului
   end_date date, -- Data expirării abonamentului
+  biometric_access BOOLEAN DEFAULT FALSE, -- Dacă are acces biometric
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
